@@ -524,6 +524,42 @@ ul {
   max-width: 480px;
 }
 
+.hero-tags {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.hero-tags::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+}
+
+.hero-tags span {
+  background: var(--teal-muted);
+  color: var(--teal-primary);
+  border: 1px solid var(--teal-border);
+  padding: 6px 16px;
+  border-radius: var(--r-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .hero-tags {
+    gap: 8px;
+  }
+  .hero-tags span {
+    padding: 5px 12px;
+    font-size: 0.78rem;
+  }
+}
+
 .hero-highlights {
   display: grid;
   grid-template-columns: 1fr 1fr;
