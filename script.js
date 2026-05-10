@@ -162,7 +162,7 @@ if (enrollmentForm) {
 
       // 2. Submit to Supabase
       const { data, error } = await _supabase
-        .from('enrollments')
+        .from('ibsp')
         .insert([enrollmentData]);
 
       if (error) throw error;
