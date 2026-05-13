@@ -150,8 +150,8 @@ if (enrollmentForm) {
       const enrollmentData = {
         full_name: formData.get('full_name'),
         email: formData.get('email'),
-        contact_number: formData.get('contact'),
-        whatsapp_number: formData.get('whatsapp'),
+        contact_number: `${formData.get('contact_code')} ${formData.get('contact')}`,
+        whatsapp_number: `${formData.get('whatsapp_code')} ${formData.get('whatsapp')}`,
         country: formData.get('country'),
         profession: formData.get('profession'),
         company: formData.get('company'),
