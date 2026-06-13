@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>IBSP Workshop — Zenacle Solutions</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --deep: #005662;
+            --bright: #03B3C3;
+            --blush: #FFD2E1;
+            --white: #FFFFFF;
+            --black: #0C1A1C;
+            --off: #F0F8F9;
+            --mid: #D8EFF1;
+            --text: #1A3234;
+            --muted: #6B9098;
+            --correct: #27ae60;
+            --wrong: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--black);
+            font-family: 'Barlow', sans-serif;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            width: 100%;
+            background: var(--deep);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-z {
+            width: 28px;
+            height: 28px;
+            background: var(--bright);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 15px;
+            color: #fff;
+            transform: skewX(-8deg);
+            flex-shrink: 0;
+        }
+
+        .logo-name {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .header-tag {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+        }
+
+        /* ── PROGRESS ── */
+        .progress-wrap {
+            width: 100%;
+            max-width: 520px;
+            padding: 16px 20px 0;
+        }
+
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 6px;
+        }
+
+        .pstep {
+            flex: 1;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: background 0.4s ease;
+        }
+
+        .pstep.done {
+            background: var(--bright);
+        }
+
+        .pstep.active {
+            background: var(--bright);
+            opacity: 0.5;
+        }
+
+        .progress-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: var(--bright);
+            text-transform: uppercase;
+        }
+
+        /* ── SCREEN ── */
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 520px;
+            padding: 24px 20px 40px;
+            animation: fadeUp 0.35s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── CARDS ── */
+        .card {
+            background: #fff;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 14px;
+        }
+
+        .card-head {
+            background: var(--deep);
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-num {
+            width: 26px;
+            height: 26px;
+            background: var(--bright);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 13px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #fff;
+        }
+
+        .card-body {
+            padding: 18px;
+        }
+
+        /* ── HERO TEXT ── */
+        .screen-eyebrow {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: var(--bright);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .screen-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 38px;
+            font-weight: 800;
+            line-height: 0.95;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .screen-sub {
+            font-size: 14px;
+            line-height: 1.55;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 24px;
+        }
+
+        /* ── FORM ELEMENTS ── */
+        .field {
+            margin-bottom: 14px;
+        }
+
+        .field label {
+            display: block;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 5px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            border: 1.5px solid var(--mid);
+            border-radius: 2px;
+            padding: 11px 14px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 15px;
+            color: var(--text);
+            background: #fff;
+            outline: none;
+            transition: border-color 0.2s;
+            -webkit-appearance: none;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: var(--bright);
+        }
+
+        .field input.error {
+            border-color: #e74c3c;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* slider */
+        .slider-wrap {
+            margin-bottom: 14px;
+        }
+
+        .slider-wrap label {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .slider-val {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--deep);
+            letter-spacing: 0;
+        }
+
+        input[type=range] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 4px;
+            background: var(--mid);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--bright);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(3, 179, 195, 0.4);
+        }
+
+        input[type=range]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--bright);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* benchmark bar */
+        .bench-bar {
+            background: var(--off);
+            border-radius: 2px;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bench-label {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .bench-val {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--deep);
+        }
+
+        /* live calc display */
+        .live-calc {
+            background: var(--deep);
+            border-radius: 2px;
+            padding: 16px 18px;
+            margin-top: 16px;
+        }
+
+        .lc-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .lc-row:last-child {
+            border: none;
+        }
+
+        .lc-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .lc-val {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--bright);
+        }
+
+        .lc-unit {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-left: 3px;
+        }
+
+        /* ── BUTTONS ── */
+        .btn {
+            width: 100%;
+            padding: 15px 20px;
+            background: var(--bright);
+            color: #fff;
+            border: none;
+            border-radius: 2px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 8px;
+        }
+
+        .btn:hover {
+            background: #02a0af;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-deep {
+            background: var(--deep);
+        }
+
+        .btn-deep:hover {
+            background: #004a56;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ── QUIZ ── */
+        .quiz-card {
+            background: #fff;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .quiz-question-bar {
+            background: var(--deep);
+            padding: 16px 18px;
+        }
+
+        .quiz-q-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            color: var(--bright);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .quiz-q-text {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.15;
+        }
+
+        .quiz-options {
+            padding: 14px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .quiz-opt {
+            border: 2px solid var(--mid);
+            border-radius: 2px;
+            padding: 14px 12px;
+            cursor: pointer;
+            transition: all 0.25s;
+            text-align: center;
+            position: relative;
+        }
+
+        .quiz-opt:hover {
+            border-color: var(--bright);
+            background: rgba(3, 179, 195, 0.04);
+        }
+
+        .quiz-opt-letter {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--bright);
+            margin-bottom: 2px;
+        }
+
+        .quiz-opt-text {
+            font-family: 'Barlow', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        /* Quiz states */
+        .quiz-opt.correct {
+            border-color: var(--correct);
+            background: rgba(39, 174, 96, 0.08);
+        }
+
+        .quiz-opt.correct .quiz-opt-letter {
+            color: var(--correct);
+        }
+
+        .quiz-opt.wrong-selected {
+            border-color: var(--wrong);
+            background: rgba(231, 76, 60, 0.06);
+        }
+
+        .quiz-opt.wrong-selected .quiz-opt-letter {
+            color: var(--wrong);
+        }
+
+        .quiz-opt.dimmed {
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        .quiz-opt.locked {
+            pointer-events: none;
+        }
+
+        /* Quiz reveal */
+        .quiz-reveal {
+            display: none;
+            padding: 0 14px 16px;
+            animation: fadeUp 0.35s ease;
+        }
+
+        .quiz-reveal.show {
+            display: block;
+        }
+
+        .reveal-box {
+            background: var(--off);
+            border-left: 3px solid var(--correct);
+            padding: 14px 16px;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .reveal-answer {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--deep);
+            margin-bottom: 6px;
+        }
+
+        .reveal-context {
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.55;
+        }
+
+        .reveal-stat {
+            display: inline-block;
+            background: var(--deep);
+            color: var(--bright);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 2px 8px;
+            margin: 4px 4px 0 0;
+            border-radius: 2px;
+        }
+
+        /* Chennai context card */
+        .context-card {
+            background: var(--deep);
+            border-radius: 2px;
+            padding: 20px 18px;
+            margin-bottom: 16px;
+        }
+
+        .context-eyebrow {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            color: var(--bright);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .context-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+
+        .context-body {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.65);
+            line-height: 1.6;
+        }
+
+        .context-body strong {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+        }
+
+        .context-stat-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .context-stat {
+            background: rgba(3, 179, 195, 0.15);
+            padding: 6px 12px;
+            border-radius: 2px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--bright);
+        }
+
+        /* ── GATE SCREEN ── */
+        .gate-card {
+            background: #fff;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .gate-head {
+            background: var(--deep);
+            padding: 20px 20px 16px;
+            text-align: center;
+        }
+
+        .gate-head-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .gate-head-sub {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .gate-body {
+            padding: 20px;
+        }
+
+        .gate-note {
+            font-size: 12px;
+            color: var(--muted);
+            text-align: center;
+            line-height: 1.5;
+            margin-top: 12px;
+        }
+
+        /* ── RESULTS ── */
+        .results-hero {
+            background: var(--deep);
+            border-radius: 2px;
+            padding: 24px 20px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .results-eyebrow {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: var(--bright);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .results-name {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .result-block {
+            background: #fff;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .rb-head {
+            background: var(--bright);
+            padding: 10px 16px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .rb-body {
+            padding: 16px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--mid);
+        }
+
+        .result-row:last-child {
+            border: none;
+        }
+
+        .result-label {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .result-val {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--deep);
+        }
+
+        .result-unit {
+            font-size: 12px;
+            color: var(--muted);
+            margin-left: 3px;
+        }
+
+        .status-bar {
+            border-radius: 2px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .sb-above {
+            background: #fef3f2;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .sb-below {
+            background: #f0faf0;
+            border-left: 4px solid #27ae60;
+        }
+
+        .sb-at {
+            background: #f0f8ff;
+            border-left: 4px solid var(--bright);
+        }
+
+        .sb-icon {
+            font-size: 18px;
+        }
+
+        .sb-text {
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        .sb-text strong {
+            font-weight: 600;
+        }
+
+        .tip-box {
+            background: var(--off);
+            border-left: 3px solid var(--bright);
+            padding: 12px 14px;
+            border-radius: 0 2px 2px 0;
+            margin-top: 10px;
+        }
+
+        .tip-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--bright);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .tip-text {
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .share-row {
+            text-align: center;
+            padding: 20px 0 0;
+        }
+
+        .share-sub {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        /* ── SUBMIT STATE ── */
+        .submitting {
+            display: none;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .submitting.show {
+            display: block;
+        }
+
+        .spin {
+            width: 36px;
+            height: 36px;
+            border: 3px solid rgba(3, 179, 195, 0.2);
+            border-top-color: var(--bright);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .submitting p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* error msg */
+        .err-msg {
+            display: none;
+            background: #fef3f2;
+            border-left: 3px solid #e74c3c;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #c0392b;
+            border-radius: 0 2px 2px 0;
+            margin-bottom: 12px;
+        }
+
+        .err-msg.show {
+            display: block;
+        }
+
+        /* ── INTRO SCREEN ── */
+        .intro-hero {
+            background: var(--deep);
+            padding: 32px 20px 28px;
+            text-align: center;
+        }
+
+        .intro-badge {
+            display: inline-block;
+            background: var(--bright);
+            color: #fff;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            margin-bottom: 14px;
+        }
+
+        .intro-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 44px;
+            font-weight: 800;
+            color: #fff;
+            line-height: 0.95;
+            margin-bottom: 12px;
+        }
+
+        .intro-sub {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.55;
+            max-width: 360px;
+            margin: 0 auto;
+        }
+
+        .intro-steps {
+            background: #fff;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .intro-step {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--mid);
+        }
+
+        .intro-step:last-child {
+            border: none;
+        }
+
+        .is-num {
+            width: 28px;
+            height: 28px;
+            background: var(--deep);
+            color: var(--bright);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .is-text {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        .is-text strong {
+            color: var(--deep);
+            font-weight: 600;
+        }
+
+        /* select event */
+        .event-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .event-btn {
+            border: 2px solid var(--mid);
+            background: #fff;
+            border-radius: 2px;
+            padding: 14px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .event-btn.selected {
+            border-color: var(--bright);
+            background: rgba(3, 179, 195, 0.06);
+        }
+
+        .eb-date {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--deep);
+        }
+
+        .eb-type {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* water total badge */
+        .water-total {
+            background: var(--deep);
+            border-radius: 2px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 16px;
+        }
+
+        .wt-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .wt-val {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--bright);
+        }
+
+        .wt-unit {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* ── MOBILE ── */
+        @media (max-width: 540px) {
+            .screen-title {
+                font-size: 32px;
+            }
+
+            .intro-title {
+                font-size: 36px;
+            }
+
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo-wrap">
+            <div class="logo-z">Z</div>
+            <span class="logo-name">Zenacle Solutions</span>
+        </div>
+        <span class="header-tag">IBSP Workshop 2026</span>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-wrap">
+        <div class="progress-steps">
+            <div class="pstep active" id="ps1"></div>
+            <div style="width:4px;"></div>
+            <div class="pstep" id="ps2"></div>
+            <div style="width:4px;"></div>
+            <div class="pstep" id="ps3"></div>
+            <div style="width:4px;"></div>
+            <div class="pstep" id="ps4"></div>
+            <div style="width:4px;"></div>
+            <div class="pstep" id="ps5"></div>
+            <div style="width:4px;"></div>
+            <div class="pstep" id="ps6"></div>
+            <div style="width:4px;"></div>
+            <div class="pstep" id="ps7"></div>
+        </div>
+        <div class="progress-label" id="progress-label">Step 1 of 7 — Welcome</div>
+    </div>
+
+    <!-- ════════════════════════════════
+  SCREEN 1 — INTRO
+════════════════════════════════ -->
+    <div class="screen active" id="s1">
+        <div class="intro-hero">
+            <div class="intro-badge">IBSP Live Workshop</div>
+            <div class="intro-title">Know Your<br>Footprint.</div>
+            <div class="intro-sub">Two quick quizzes. Two calculators. Your real numbers — energy and water.</div>
+        </div>
+
+        <div style="padding: 4px 0 0;">
+            <div class="card" style="margin-top:14px;">
+                <div class="card-body" style="padding:16px 18px;display:flex;align-items:center;gap:14px;">
+                    <div
+                        style="width:42px;height:42px;background:var(--deep);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <span style="font-size:18px;">📡</span>
+                    </div>
+                    <div>
+                        <div
+                            style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">
+                            Live Online Webinar</div>
+                        <div
+                            style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--deep);margin-top:2px;">
+                            June 13, 2026 · 11:00 AM IST</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="intro-steps">
+                <div class="intro-step">
+                    <div class="is-num">1</div>
+                    <div class="is-text"><strong>Energy Quiz</strong><br>Test what you know about India's power grid
+                    </div>
+                </div>
+                <div class="intro-step">
+                    <div class="is-num">2</div>
+                    <div class="is-text"><strong>Carbon Calculator</strong><br>Your CO₂ footprint from electricity</div>
+                </div>
+                <div class="intro-step">
+                    <div class="is-num">3</div>
+                    <div class="is-text"><strong>Water Quiz</strong><br>How much does one person really use?</div>
+                </div>
+                <div class="intro-step">
+                    <div class="is-num">4</div>
+                    <div class="is-text"><strong>Water Calculator</strong><br>Estimate your daily consumption</div>
+                </div>
+                <div class="intro-step">
+                    <div class="is-num">5</div>
+                    <div class="is-text"><strong>Your Results</strong><br>See where you stand vs benchmarks</div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="goTo(2)">Start Workshop →</button>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════
+  SCREEN 2 — ENERGY QUIZ
+════════════════════════════════ -->
+    <div class="screen" id="s2">
+        <div class="screen-eyebrow">Energy Quiz</div>
+        <div class="screen-title">Test Your<br>Knowledge.</div>
+        <div class="screen-sub">Two quick questions. No googling. Tap your answer.</div>
+
+        <!-- Q1 -->
+        <div class="quiz-card" id="eq1-card">
+            <div class="quiz-question-bar">
+                <div class="quiz-q-label">Question 1 of 2</div>
+                <div class="quiz-q-text">What is India's primary source of electricity today?</div>
+            </div>
+            <div class="quiz-options" id="eq1-opts">
+                <div class="quiz-opt" onclick="answerQuiz('eq1','A')">
+                    <div class="quiz-opt-letter">A</div>
+                    <div class="quiz-opt-text">Solar</div>
+                </div>
+                <div class="quiz-opt" onclick="answerQuiz('eq1','B')">
+                    <div class="quiz-opt-letter">B</div>
+                    <div class="quiz-opt-text">Coal</div>
+                </div>
+                <div class="quiz-opt" onclick="answerQuiz('eq1','C')">
+                    <div class="quiz-opt-letter">C</div>
+                    <div class="quiz-opt-text">Natural Gas</div>
+                </div>
+                <div class="quiz-opt" onclick="answerQuiz('eq1','D')">
+                    <div class="quiz-opt-letter">D</div>
+                    <div class="quiz-opt-text">Hydropower</div>
+                </div>
+            </div>
+            <div class="quiz-reveal" id="eq1-reveal">
+                <div class="reveal-box">
+                    <div class="reveal-answer">B — Coal</div>
+                    <div class="reveal-context">
+                        Fossil fuels still generate ~71% of India's electricity. Coal alone supplies 46% of total
+                        energy.
+                        India is the world's 3rd largest energy consumer.
+                    </div>
+                    <div style="margin-top:8px;">
+                        <span class="reveal-stat">~1,840 TWh generated FY25-26</span>
+                        <span class="reveal-stat">258 GW renewables installed</span>
+                    </div>
+                    <div class="reveal-context" style="margin-top:8px;color:var(--correct);font-weight:500;">
+                        The shift is real — solar is now the cheapest new power source.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Q2 (hidden until Q1 answered) -->
+        <div class="quiz-card" id="eq2-card" style="display:none;">
+            <div class="quiz-question-bar">
+                <div class="quiz-q-label">Question 2 of 2</div>
+                <div class="quiz-q-text">1 unit of electricity in India produces how much CO₂?</div>
+            </div>
+            <div class="quiz-options" id="eq2-opts">
+                <div class="quiz-opt" onclick="answerQuiz('eq2','A')">
+                    <div class="quiz-opt-letter">A</div>
+                    <div class="quiz-opt-text">0.82 kg</div>
+                </div>
+                <div class="quiz-opt" onclick="answerQuiz('eq2','B')">
+                    <div class="quiz-opt-letter">B</div>
+                    <div class="quiz-opt-text">0.65 kg</div>
+                </div>
+                <div class="quiz-opt" onclick="answerQuiz('eq2','C')">
+                    <div class="quiz-opt-letter">C</div>
+                    <div class="quiz-opt-text">0.9 kg</div>
+                </div>
+                <div class="quiz-opt" onclick="answerQuiz('eq2','D')">
+                    <div class="quiz-opt-letter">D</div>
+                    <div class="quiz-opt-text">1.4 kg</div>
+                </div>
+            </div>
+            <div class="quiz-reveal" id="eq2-reveal">
+                <div class="reveal-box">
+                    <div class="reveal-answer">A — 0.82 kg per unit</div>
+                    <div class="reveal-context">
+                        This is the CEA's official grid emission factor. It means a home using 200 units/month produces
+                        <strong>164 kg CO₂</strong> — nearly <strong>2 tonnes per year</strong>, from electricity alone.
+                    </div>
+                    <div class="reveal-context" style="margin-top:8px;font-style:italic;color:var(--muted);">
+                        Now let's calculate yours.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn" id="eq-continue" style="display:none;" onclick="goTo(3)">Calculate My Carbon Footprint
+            →</button>
+        <button class="btn btn-deep" style="margin-top:8px;" onclick="goTo(1)">← Back</button>
+    </div>
+
+    <!-- ════════════════════════════════
+  SCREEN 3 — WORKSHOP 1: ENERGY CALCULATOR
+════════════════════════════════ -->
+    <div class="screen" id="s3">
+        <div class="screen-eyebrow">Workshop 1</div>
+        <div class="screen-title">Your Carbon<br>Footprint.</div>
+        <div class="screen-sub">Enter your last electricity bill. We'll calculate your CO₂ impact — per month and per
+            year.</div>
+
+        <div class="card">
+            <div class="card-head">
+                <div class="card-num">1</div>
+                <div class="card-title">Your Electricity Bill</div>
+            </div>
+            <div class="card-body">
+                <div class="field">
+                    <label>Total units consumed (kWh) — from your last bill</label>
+                    <input type="number" id="units" placeholder="e.g. 220" min="0" max="9999" oninput="calcCarbon()"
+                        inputmode="numeric">
+                </div>
+                <div class="bench-bar">
+                    <span class="bench-label">Typical Indian household</span>
+                    <span class="bench-val">150 – 300 units / bill</span>
+                </div>
+                <div class="bench-bar">
+                    <span class="bench-label">CEA Grid Emission Factor</span>
+                    <span class="bench-val">0.82 kg CO₂ / unit</span>
+                </div>
+
+                <div class="live-calc" id="carbon-calc">
+                    <div class="lc-row">
+                        <span class="lc-label">This billing period</span>
+                        <span><span class="lc-val" id="lc-period">—</span><span class="lc-unit">kg CO₂</span></span>
+                    </div>
+                    <div class="lc-row">
+                        <span class="lc-label">Per month (estimated)</span>
+                        <span><span class="lc-val" id="lc-month">—</span><span class="lc-unit">kg CO₂</span></span>
+                    </div>
+                    <div class="lc-row">
+                        <span class="lc-label">Per year (estimated)</span>
+                        <span><span class="lc-val" id="lc-year">—</span><span class="lc-unit">kg CO₂</span></span>
+                    </div>
+                    <div class="lc-row">
+                        <span class="lc-label">Annual in tonnes</span>
+                        <span><span class="lc-val" id="lc-tonnes">—</span><span class="lc-unit">tCO₂e</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <div class="card-num" style="background:rgba(255,255,255,0.15);">?</div>
+                <div class="card-title">How this is calculated</div>
+            </div>
+            <div class="card-body">
+                <div style="font-size:13px;color:var(--text);line-height:1.6;">
+                    <div style="margin-bottom:8px;">Your bill units × <strong>0.82</strong> = CO₂ in kg for the billing
+                        period</div>
+                    <div style="margin-bottom:8px;">TNEB bills are <strong>bi-monthly</strong> — so we divide by 2 for
+                        monthly</div>
+                    <div>Annual = monthly × 12</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn" onclick="goTo(4)">Continue to Water Quiz →</button>
+        <button class="btn btn-deep" style="margin-top:8px;" onclick="goTo(2)">← Back</button>
+    </div>
+
+    <!-- ════════════════════════════════
+  SCREEN 4 — WATER QUIZ
+════════════════════════════════ -->
+    <div class="screen" id="s4">
+        <div class="screen-eyebrow">Water Quiz</div>
+        <div class="screen-title">Before You<br>Calculate.</div>
+        <div class="screen-sub">A city of 12 million ran out of water. Now, test what you know.</div>
+
+        <!-- Chennai context -->
+        <div class="context-card">
+            <div class="context-eyebrow">Chennai — June 2019</div>
+            <div class="context-title">How a city of 12 million ran out of water.</div>
+            <div class="context-body">
+                In 1970, Chennai had 3.2 million people. Groundwater was accessible at 5–10m. By 2019, all 20
+                groundwater units were officially <strong>'over-exploited'</strong>. Four major reservoirs — Poondi,
+                Cholavaram, Red Hills, Chembarambakkam — hit <strong>0.1% capacity</strong>.
+            </div>
+            <div class="context-stat-row">
+                <span class="context-stat">80% groundwater depleted</span>
+                <span class="context-stat">0.1% reservoir capacity</span>
+            </div>
+            <div class="context-body" style="margin-top:12px;font-style:italic;">
+                The infrastructure built on drained wetlands was flying water in on trucks.
+            </div>
+        </div>
+
+        <!-- Water Quiz Q1 -->
+        <div class="quiz-card" id="wq1-card">
+            <div class="quiz-question-bar">
+                <div class="quiz-q-label">Quick question</div>
+                <div class="quiz-q-text">How much water does one person need per day — India's national standard?</div>
+            </div>
+            <div class="quiz-options" id="wq1-opts">
+                <div class="quiz-opt" onclick="answerQuiz('wq1','A')">
+                    <div class="quiz-opt-letter">A</div>
+                    <div class="quiz-opt-text">160 litres</div>
+                </div>
+                <div class="quiz-opt" onclick="answerQuiz('wq1','B')">
+                    <div class="quiz-opt-letter">B</div>
+                    <div class="quiz-opt-text">200 litres</div>
+                </div>
+                <div class="quiz-opt" onclick="answerQuiz('wq1','C')">
+                    <div class="quiz-opt-letter">C</div>
+                    <div class="quiz-opt-text">50 litres</div>
+                </div>
+                <div class="quiz-opt" onclick="answerQuiz('wq1','D')">
+                    <div class="quiz-opt-letter">D</div>
+                    <div class="quiz-opt-text">135 litres</div>
+                </div>
+            </div>
+            <div class="quiz-reveal" id="wq1-reveal">
+                <div class="reveal-box">
+                    <div class="reveal-answer">D — 135 litres (BIS Standard)</div>
+                    <div class="reveal-context">
+                        The WHO minimum is just 50L for basic health and dignity. India's BIS standard is 135L.
+                        But urban India's actual usage? <strong>135–200 litres per person per day</strong> — much of it
+                        wasted.
+                    </div>
+                    <div style="margin-top:8px;">
+                        <span class="reveal-stat">50L WHO minimum</span>
+                        <span class="reveal-stat">135L BIS standard</span>
+                        <span class="reveal-stat">135–200L urban actual</span>
+                    </div>
+                    <div class="reveal-context" style="margin-top:8px;font-style:italic;color:var(--muted);">
+                        Now let's see where you stand.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn" id="wq-continue" style="display:none;" onclick="goTo(5)">Calculate My Water Footprint
+            →</button>
+        <button class="btn btn-deep" style="margin-top:8px;" onclick="goTo(3)">← Back</button>
+    </div>
+
+    <!-- ════════════════════════════════
+  SCREEN 5 — WORKSHOP 2: WATER CALCULATOR
+════════════════════════════════ -->
+    <div class="screen" id="s5">
+        <div class="screen-eyebrow">Workshop 2</div>
+        <div class="screen-title">Your Water<br>Footprint.</div>
+        <div class="screen-sub">Adjust the sliders to match your daily habits. The tool calculates your total and
+            compares it to WHO and BIS benchmarks.</div>
+
+        <div class="card">
+            <div class="card-head">
+                <div class="card-num">2</div>
+                <div class="card-title">Daily Water Usage</div>
+            </div>
+            <div class="card-body">
+
+                <div class="slider-wrap">
+                    <label>
+                        <span>Shower duration</span>
+                        <span class="slider-val"><span id="sv-shower">8</span> min</span>
+                    </label>
+                    <input type="range" min="2" max="30" value="8" id="sl-shower"
+                        oninput="updateSlider('shower');calcWater()">
+                    <div class="bench-bar" style="margin-top:8px;margin-bottom:0;">
+                        <span class="bench-label">Benchmark: 6 L per minute</span>
+                        <span class="bench-val" id="bv-shower">48 L</span>
+                    </div>
+                </div>
+
+                <div class="slider-wrap" style="margin-top:14px;">
+                    <label>
+                        <span>Toilet flushes per day</span>
+                        <span class="slider-val"><span id="sv-toilet">4</span> times</span>
+                    </label>
+                    <input type="range" min="1" max="10" value="4" id="sl-toilet"
+                        oninput="updateSlider('toilet');calcWater()">
+                    <div class="bench-bar" style="margin-top:8px;margin-bottom:0;">
+                        <span class="bench-label">Benchmark: 11 L per flush</span>
+                        <span class="bench-val" id="bv-toilet">44 L</span>
+                    </div>
+                </div>
+
+                <div class="slider-wrap" style="margin-top:14px;">
+                    <label>
+                        <span>Drinking water</span>
+                        <span class="slider-val"><span id="sv-drinking">3</span> L</span>
+                    </label>
+                    <input type="range" min="1" max="8" value="3" id="sl-drinking"
+                        oninput="updateSlider('drinking');calcWater()">
+                </div>
+
+                <div class="slider-wrap" style="margin-top:14px;">
+                    <label>
+                        <span>Cooking water</span>
+                        <span class="slider-val"><span id="sv-cooking">5</span> L</span>
+                    </label>
+                    <input type="range" min="1" max="15" value="5" id="sl-cooking"
+                        oninput="updateSlider('cooking');calcWater()">
+                </div>
+
+                <div class="slider-wrap" style="margin-top:14px;">
+                    <label>
+                        <span>Handwashing / face wash</span>
+                        <span class="slider-val"><span id="sv-washing">5</span> times</span>
+                    </label>
+                    <input type="range" min="1" max="15" value="5" id="sl-washing"
+                        oninput="updateSlider('washing');calcWater()">
+                    <div class="bench-bar" style="margin-top:8px;margin-bottom:0;">
+                        <span class="bench-label">Benchmark: 2.5 L per instance</span>
+                        <span class="bench-val" id="bv-washing">12.5 L</span>
+                    </div>
+                </div>
+
+                <div class="water-total">
+                    <div>
+                        <div class="wt-label">Your estimated daily total</div>
+                        <div style="display:flex;align-items:baseline;gap:4px;margin-top:4px;">
+                            <div class="wt-val" id="water-total">—</div>
+                            <div class="wt-unit">litres / day</div>
+                        </div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div class="wt-label">vs WHO min</div>
+                        <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:rgba(255,255,255,0.7);"
+                            id="water-vs-who">—</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <div class="card-num" style="background:rgba(255,255,255,0.15);">📊</div>
+                <div class="card-title">Benchmarks</div>
+            </div>
+            <div class="card-body">
+                <div class="result-row">
+                    <span class="result-label">WHO Minimum</span>
+                    <span><span class="result-val" style="font-size:20px;">50</span><span
+                            class="result-unit">L/day</span></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">BIS Standard (India)</span>
+                    <span><span class="result-val" style="font-size:20px;">135</span><span
+                            class="result-unit">L/day</span></span>
+                </div>
+                <div class="result-row" style="border:none;">
+                    <span class="result-label">Urban India Actual</span>
+                    <span><span class="result-val" style="font-size:20px;">135–200</span><span
+                            class="result-unit">L/day</span></span>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn" onclick="goTo(6)">See My Results →</button>
+        <button class="btn btn-deep" style="margin-top:8px;" onclick="goTo(4)">← Back</button>
+    </div>
+
+    <!-- ════════════════════════════════
+  SCREEN 6 — LEAD GATE
+════════════════════════════════ -->
+    <div class="screen" id="s6">
+        <div class="screen-eyebrow">Almost there</div>
+        <div class="screen-title">Your results<br>are ready.</div>
+        <div class="screen-sub">Enter your details to see your personal carbon and water footprint — and save them for
+            reference.</div>
+
+        <div class="gate-card">
+            <div class="gate-head">
+                <div class="gate-head-title">One last step</div>
+                <div class="gate-head-sub">Your results are calculated. Just share your details to unlock them.</div>
+            </div>
+            <div class="gate-body">
+                <div class="err-msg" id="gate-err">Please fill in all fields correctly.</div>
+
+                <div class="field">
+                    <label>Full Name *</label>
+                    <input type="text" id="g-name" placeholder="Your name" autocomplete="name">
+                </div>
+                <div class="field">
+                    <label>Email Address *</label>
+                    <input type="email" id="g-email" placeholder="your@email.com" autocomplete="email"
+                        inputmode="email">
+                </div>
+                <div class="field">
+                    <label>WhatsApp / Phone *</label>
+                    <input type="tel" id="g-phone" placeholder="+91 98765 43210" autocomplete="tel" inputmode="tel">
+                </div>
+
+                <div class="submitting" id="submitting">
+                    <div class="spin"></div>
+                    <p>Saving your results...</p>
+                </div>
+
+                <button class="btn" id="submit-btn" onclick="submitData()">Show My Results →</button>
+
+                <div class="gate-note">
+                    Your details will be used by Zenacle Solutions to share resources and updates about the Integrated
+                    Building Systems Programme. We don't spam.
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-deep" style="margin-top:12px;" onclick="goTo(5)">← Back</button>
+    </div>
+
+    <!-- ════════════════════════════════
+  SCREEN 7 — RESULTS
+════════════════════════════════ -->
+    <div class="screen" id="s7">
+
+        <div class="results-hero">
+            <div class="results-eyebrow">Your personal footprint</div>
+            <div class="results-name" id="r-name">—</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;" id="r-event">—</div>
+        </div>
+
+        <!-- CARBON RESULTS -->
+        <div class="result-block">
+            <div class="rb-head">Workshop 1 — Carbon Footprint</div>
+            <div class="rb-body">
+                <div class="result-row">
+                    <span class="result-label">Bill period CO₂</span>
+                    <span><span class="result-val" id="r-period">—</span><span class="result-unit">kg</span></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Monthly CO₂ (est.)</span>
+                    <span><span class="result-val" id="r-month">—</span><span class="result-unit">kg</span></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Annual CO₂</span>
+                    <span><span class="result-val" id="r-year">—</span><span class="result-unit">kg</span></span>
+                </div>
+                <div class="result-row" style="border:none;">
+                    <span class="result-label">Annual in tonnes</span>
+                    <span><span class="result-val" style="color:var(--bright);" id="r-tonnes">—</span><span
+                            class="result-unit">tCO₂e</span></span>
+                </div>
+
+                <div class="tip-box" id="carbon-tip">
+                    <div class="tip-label">Quick win</div>
+                    <div class="tip-text" id="carbon-tip-text">—</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WATER RESULTS -->
+        <div class="result-block">
+            <div class="rb-head">Workshop 2 — Water Footprint</div>
+            <div class="rb-body">
+                <div class="result-row">
+                    <span class="result-label">Daily usage</span>
+                    <span><span class="result-val" id="r-water">—</span><span class="result-unit">L/day</span></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">vs WHO minimum (50L)</span>
+                    <span><span class="result-val" id="r-vs-who" style="font-size:18px;">—</span></span>
+                </div>
+                <div class="result-row" style="border:none;">
+                    <span class="result-label">vs BIS standard (135L)</span>
+                    <span><span class="result-val" id="r-vs-bis" style="font-size:18px;">—</span></span>
+                </div>
+
+                <div class="status-bar" id="water-status">
+                    <span class="sb-icon" id="ws-icon">💧</span>
+                    <span class="sb-text" id="ws-text">—</span>
+                </div>
+
+                <div class="tip-box" style="margin-top:10px;">
+                    <div class="tip-label">What this means for buildings</div>
+                    <div class="tip-text">Smart water meters, greywater recycling, and rainwater harvesting are not
+                        luxury add-ons. They are the difference between a building that functions in 2035 and one that
+                        doesn't.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WHAT'S NEXT -->
+        <div class="result-block">
+            <div class="rb-head" style="background:var(--deep);">What's Next</div>
+            <div class="rb-body">
+                <div style="font-size:14px;color:var(--text);line-height:1.6;margin-bottom:14px;">
+                    The buildings you design, commission, or manage will determine whether India meets its climate
+                    commitments. You now know your own baseline. The next step is understanding the systems behind it.
+                </div>
+                <div class="tip-box" style="margin-bottom:14px;">
+                    <div class="tip-label">Read</div>
+                    <div class="tip-text">
+                        <a href="https://zenacle.in/blogs/net-zero-energy-buildings-india-design-strategies"
+                            target="_blank" style="color:var(--deep);font-weight:600;">Net Zero Building Design
+                            Strategies →</a><br>
+                        <a href="https://zenacle.in/blogs/water-materials-circular-design-net-zero-buildings-india"
+                            target="_blank"
+                            style="color:var(--deep);font-weight:600;margin-top:4px;display:block;">Water, Materials
+                            &amp; Circular Design →</a>
+                    </div>
+                </div>
+                <a href="https://ibsp.zenacle.in" target="_blank" style="text-decoration:none;">
+                    <button class="btn" style="margin-top:0;">Explore IBSP — Founding Batch June 15 →</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="share-row">
+            <div class="share-sub">Zenacle Solutions &nbsp;·&nbsp; zenacle.in &nbsp;·&nbsp; ibsp.zenacle.in</div>
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════
+  JAVASCRIPT
+══════════════════════════════════════════ -->
+    <script>
+        const SUPABASE_URL = 'https://hzcivmtxwrknknpsmbqr.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6Y2l2bXR4d3JrbmtucHNtYnFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxODM5MzcsImV4cCI6MjA5MTc1OTkzN30.jvyFw4YZzvOmIEA4szOsvbv3NxpMsBDO8CrHQKkZmfU';
+
+        const selectedEvent = 'June 7, 2026 — Online Webinar';
+        let currentScreen = 1;
+        const TOTAL_SCREENS = 7;
+
+        // Quiz answers
+        const quizAnswers = {
+            eq1: 'B',
+            eq2: 'A',
+            wq1: 'D'
+        };
+        const quizAnswered = { eq1: false, eq2: false, wq1: false };
+
+        // Carbon state
+        let carbonData = { units: 0, period: 0, month: 0, year: 0, tonnes: 0 };
+
+        // Water state
+        let waterData = {
+            showerMin: 8, showerL: 48,
+            flushes: 4, toiletL: 44,
+            drinkingL: 3,
+            cookingL: 5,
+            washings: 5, washingL: 12.5,
+            total: 0
+        };
+
+        // Event is fixed — online only
+
+        // ── NAVIGATION ──
+        const stepLabels = [
+            '',
+            'Step 1 of 7 — Welcome',
+            'Step 2 of 7 — Energy Quiz',
+            'Step 3 of 7 — Carbon Calculator',
+            'Step 4 of 7 — Water Quiz',
+            'Step 5 of 7 — Water Calculator',
+            'Step 6 of 7 — Your Details',
+            'Step 7 of 7 — Your Results'
+        ];
+
+        function goTo(n) {
+            document.getElementById('s' + currentScreen).classList.remove('active');
+            document.getElementById('s' + n).classList.add('active');
+            currentScreen = n;
+            updateProgress(n);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateProgress(n) {
+            document.getElementById('progress-label').textContent = stepLabels[n];
+            for (let i = 1; i <= TOTAL_SCREENS; i++) {
+                const el = document.getElementById('ps' + i);
+                el.className = 'pstep';
+                if (i < n) el.classList.add('done');
+                else if (i === n) el.classList.add('active');
+            }
+        }
+
+        // ── QUIZ LOGIC ──
+        function answerQuiz(quizId, selected) {
+            if (quizAnswered[quizId]) return;
+            quizAnswered[quizId] = true;
+
+            const correct = quizAnswers[quizId];
+            const optsEl = document.getElementById(quizId + '-opts');
+            const opts = optsEl.querySelectorAll('.quiz-opt');
+            const letters = ['A', 'B', 'C', 'D'];
+
+            opts.forEach((opt, i) => {
+                const letter = letters[i];
+                opt.classList.add('locked');
+
+                if (letter === correct) {
+                    opt.classList.add('correct');
+                } else if (letter === selected && selected !== correct) {
+                    opt.classList.add('wrong-selected');
+                } else {
+                    opt.classList.add('dimmed');
+                }
+            });
+
+            // Show reveal
+            const reveal = document.getElementById(quizId + '-reveal');
+            reveal.classList.add('show');
+
+            // Handle post-answer flow
+            if (quizId === 'eq1') {
+                // Show Q2 after a brief pause
+                setTimeout(() => {
+                    const q2 = document.getElementById('eq2-card');
+                    q2.style.display = 'block';
+                    q2.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 800);
+            }
+
+            if (quizId === 'eq2') {
+                // Show continue button
+                setTimeout(() => {
+                    const btn = document.getElementById('eq-continue');
+                    btn.style.display = 'block';
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 600);
+            }
+
+            if (quizId === 'wq1') {
+                setTimeout(() => {
+                    const btn = document.getElementById('wq-continue');
+                    btn.style.display = 'block';
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 600);
+            }
+        }
+
+        // ── CARBON CALCULATION ──
+        function calcCarbon() {
+            const units = parseFloat(document.getElementById('units').value) || 0;
+            const period = +(units * 0.82).toFixed(1);
+            const month = +(period / 2).toFixed(1);
+            const year = +(month * 12).toFixed(1);
+            const tonnes = +(year / 1000).toFixed(3);
+
+            carbonData = { units, period, month, year, tonnes };
+
+            document.getElementById('lc-period').textContent = units > 0 ? period : '—';
+            document.getElementById('lc-month').textContent = units > 0 ? month : '—';
+            document.getElementById('lc-year').textContent = units > 0 ? year : '—';
+            document.getElementById('lc-tonnes').textContent = units > 0 ? tonnes : '—';
+        }
+
+        // ── WATER SLIDERS ──
+        function updateSlider(type) {
+            switch (type) {
+                case 'shower':
+                    waterData.showerMin = +document.getElementById('sl-shower').value;
+                    waterData.showerL = +(waterData.showerMin * 6).toFixed(1);
+                    document.getElementById('sv-shower').textContent = waterData.showerMin;
+                    document.getElementById('bv-shower').textContent = waterData.showerL + ' L';
+                    break;
+                case 'toilet':
+                    waterData.flushes = +document.getElementById('sl-toilet').value;
+                    waterData.toiletL = +(waterData.flushes * 11).toFixed(1);
+                    document.getElementById('sv-toilet').textContent = waterData.flushes;
+                    document.getElementById('bv-toilet').textContent = waterData.toiletL + ' L';
+                    break;
+                case 'drinking':
+                    waterData.drinkingL = +document.getElementById('sl-drinking').value;
+                    document.getElementById('sv-drinking').textContent = waterData.drinkingL;
+                    break;
+                case 'cooking':
+                    waterData.cookingL = +document.getElementById('sl-cooking').value;
+                    document.getElementById('sv-cooking').textContent = waterData.cookingL;
+                    break;
+                case 'washing':
+                    waterData.washings = +document.getElementById('sl-washing').value;
+                    waterData.washingL = +(waterData.washings * 2.5).toFixed(1);
+                    document.getElementById('sv-washing').textContent = waterData.washings;
+                    document.getElementById('bv-washing').textContent = waterData.washingL + ' L';
+                    break;
+            }
+        }
+
+        function calcWater() {
+            const total = +(
+                waterData.showerL +
+                waterData.toiletL +
+                waterData.drinkingL +
+                waterData.cookingL +
+                waterData.washingL
+            ).toFixed(1);
+            waterData.total = total;
+
+            document.getElementById('water-total').textContent = total;
+
+            const vsWho = total > 50
+                ? '+' + (total - 50).toFixed(0) + 'L above'
+                : (total - 50).toFixed(0) + 'L below';
+            document.getElementById('water-vs-who').textContent = vsWho;
+        }
+
+        // ── SUBMIT ──
+        async function submitData() {
+            const name = document.getElementById('g-name').value.trim();
+            const email = document.getElementById('g-email').value.trim();
+            const phone = document.getElementById('g-phone').value.trim();
+
+            const errEl = document.getElementById('gate-err');
+            errEl.classList.remove('show');
+
+            if (!name || !email || !phone) {
+                errEl.textContent = 'Please fill in all fields.';
+                errEl.classList.add('show');
+                return;
+            }
+            if (!/\S+@\S+\.\S+/.test(email)) {
+                errEl.textContent = 'Please enter a valid email address.';
+                errEl.classList.add('show');
+                return;
+            }
+
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submitting').classList.add('show');
+
+            const payload = {
+                event_date: selectedEvent,
+                name,
+                email,
+                phone,
+                monthly_units: carbonData.units || null,
+                monthly_kg_co2: carbonData.month || null,
+                annual_kg_co2: carbonData.year || null,
+                annual_tonnes_co2: carbonData.tonnes || null,
+                shower_minutes: waterData.showerMin,
+                shower_litres: waterData.showerL,
+                toilet_flushes: waterData.flushes,
+                toilet_litres: waterData.toiletL,
+                drinking_litres: waterData.drinkingL,
+                cooking_litres: waterData.cookingL,
+                washing_instances: waterData.washings,
+                washing_litres: waterData.washingL,
+                daily_water_total: waterData.total,
+                vs_who: waterData.total > 50 ? 'above' : 'below',
+                vs_bis: waterData.total > 135 ? 'above' : 'below'
+            };
+
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/webinar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_ANON,
+                        'Authorization': `Bearer ${SUPABASE_ANON}`,
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!res.ok) throw new Error('Insert failed');
+
+                populateResults(name, email);
+                goTo(7);
+
+            } catch (e) {
+                populateResults(name, email);
+                goTo(7);
+            } finally {
+                document.getElementById('submitting').classList.remove('show');
+                document.getElementById('submit-btn').disabled = false;
+            }
+        }
+
+        // ── POPULATE RESULTS ──
+        function populateResults(name) {
+            document.getElementById('r-name').textContent = 'Hi, ' + name.split(' ')[0];
+            document.getElementById('r-event').textContent = selectedEvent;
+
+            // Carbon
+            if (carbonData.units > 0) {
+                document.getElementById('r-period').textContent = carbonData.period;
+                document.getElementById('r-month').textContent = carbonData.month;
+                document.getElementById('r-year').textContent = carbonData.year;
+                document.getElementById('r-tonnes').textContent = carbonData.tonnes;
+
+                let tip = '';
+                if (carbonData.tonnes < 0.5) tip = 'Your footprint is relatively low. The biggest lever: ensure your home has 5-star rated appliances, especially your AC.';
+                else if (carbonData.tonnes < 1.5) tip = 'Lowering your AC set temperature by 1–2°C saves 6% energy. Smart timers and automation can cut HVAC use by 15–25% further.';
+                else tip = 'Your electricity footprint is above average. LED lighting, unplugging standby devices, and a 5-star AC together could cut this by 30–40%.';
+                document.getElementById('carbon-tip-text').textContent = tip;
+            } else {
+                document.getElementById('r-period').textContent = 'No data';
+                document.getElementById('r-month').textContent = 'No data';
+                document.getElementById('r-year').textContent = 'No data';
+                document.getElementById('r-tonnes').textContent = 'No data';
+                document.getElementById('carbon-tip-text').textContent = 'Enter your bill units in Workshop 1 to see your personal calculation.';
+            }
+
+            // Water
+            const w = waterData.total;
+            document.getElementById('r-water').textContent = w;
+            document.getElementById('r-vs-who').textContent = w > 50 ? '+' + (w - 50).toFixed(0) + 'L above WHO' : (w - 50).toFixed(0) + 'L below WHO';
+            document.getElementById('r-vs-bis').textContent = w > 135 ? '+' + (w - 135).toFixed(0) + 'L above BIS' : (w - 135).toFixed(0) + 'L below BIS';
+
+            const wsEl = document.getElementById('water-status');
+            const wsIcon = document.getElementById('ws-icon');
+            const wsText = document.getElementById('ws-text');
+
+            if (w <= 50) {
+                wsEl.className = 'status-bar sb-below';
+                wsIcon.textContent = '✅';
+                wsText.innerHTML = `<strong>${w} L/day</strong> — at or below the WHO minimum. Ensure you have enough for health and hygiene needs.`;
+            } else if (w <= 135) {
+                wsEl.className = 'status-bar sb-at';
+                wsIcon.textContent = '💧';
+                wsText.innerHTML = `<strong>${w} L/day</strong> — within the BIS standard. You're using water efficiently compared to urban India's average.`;
+            } else if (w <= 200) {
+                wsEl.className = 'status-bar sb-above';
+                wsIcon.textContent = '⚠️';
+                wsText.innerHTML = `<strong>${w} L/day</strong> — above the BIS standard of 135L. Shorter showers and low-flow fixtures could meaningfully reduce this.`;
+            } else {
+                wsEl.className = 'status-bar sb-above';
+                wsIcon.textContent = '🔴';
+                wsText.innerHTML = `<strong>${w} L/day</strong> — significantly above average. A smart water meter would show exactly where the usage is concentrated.`;
+            }
+        }
+
+        // ── INIT ──
+        calcCarbon();
+        calcWater();
+        updateProgress(1);
+    </script>
+</body>
+
+</html>
