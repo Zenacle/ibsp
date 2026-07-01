@@ -693,7 +693,7 @@
                 after payment verification and batch confirmation.</span>
             </label>
 
-            <button type="submit" class="btn-primary form-submit">Submit Enrollment</button>
+            <button type="submit" class="btn-primary form-submit">Pay ₹25,200</button>
           </form>
 
           <!-- Success Message (Hidden by default) -->
@@ -1087,10 +1087,22 @@
           <a href="https://zenacle.in">Terms of Service</a>
         </div>
       </div>
-    </div>
   </footer>
+
+  <!-- Success Modal Overlay -->
+  <div id="successModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3>🎉 Registration Successful!</h3>
+      <p id="modalMessage"></p>
+      <button id="modalOkBtn" class="btn-primary">OK</button>
+    </div>
+  </div>
+
   <!-- Supabase Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Razorpay Checkout -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
   <!-- Your JS -->
   <script src="script.js"></script>
