@@ -6,7 +6,7 @@ const path = require('path');
 const rateLimit = require('express-rate-limit');
 
 // Load environment variables from the correct project root
-dotenv.config({ path: path.join(__dirname, '.env') });
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -42,8 +42,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static frontend files
-app.use(express.static(__dirname));
+// Serve static frontend files (for local testing)
+app.use(express.static(path.join(__dirname, '..')));
 
 // Rate limiting on registration endpoint
 const registerLimiter = rateLimit({
