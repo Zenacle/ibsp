@@ -119,7 +119,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// ===== RAZORPAY & ENROLLMENT FORM SUBMISSION =====
+// ===== DIRECT ENROLLMENT FORM SUBMISSION =====
 const enrollmentForm = document.getElementById('enrollmentForm');
 const formSuccess = document.getElementById('formSuccess');
 
@@ -130,8 +130,8 @@ if (enrollmentForm) {
     const submitBtn = enrollmentForm.querySelector('.form-submit');
     const originalText = submitBtn.innerText;
     
-    // UI Loading State while creating order
-    submitBtn.innerText = 'Initializing payment...';
+    // UI Loading State
+    submitBtn.innerText = 'Registering...';
     submitBtn.disabled = true;
 
     try {
@@ -154,8 +154,8 @@ if (enrollmentForm) {
         time_slots: timeSlots // Array of strings
       };
 
-      // 2. Request backend to create Razorpay Order
-      const orderRes = await fetch('/api/create-order', {
+      // 2. Request backend to register candidate directly
+      const regRes = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -163,122 +163,53 @@ if (enrollmentForm) {
         body: JSON.stringify({ enrollmentData })
       });
 
-      if (!orderRes.ok) {
-        const errData = await orderRes.json();
-        throw new Error(errData.error || 'Failed to create payment order.');
+      if (!regRes.ok) {
+        const errData = await regRes.json();
+        throw new Error(errData.error || 'Failed to complete registration.');
       }
 
-      const orderData = await orderRes.json();
+      const regData = await regRes.json();
 
-      // 3. Configure Razorpay Checkout options
-      const options = {
-        key: orderData.key_id,
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: 'IBSP',
-        description: 'LEED Green Associate Program',
-        order_id: orderData.order_id,
-        handler: async function (response) {
-          // Disable button and show verification state
-          submitBtn.innerText = 'Verifying payment...';
-          submitBtn.disabled = true;
+      // Select success modal elements
+      const modal = document.getElementById('successModal');
+      const modalMessage = document.getElementById('modalMessage');
+      const modalOkBtn = document.getElementById('modalOkBtn');
 
-          try {
-            // Send payment details to backend for verification and insertion
-            const verifyRes = await fetch('/api/verify-payment', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_signature: response.razorpay_signature,
-                enrollmentData: enrollmentData
-              })
-            });
+      if (regData.emailSent) {
+        modalMessage.innerHTML = `
+          Thank you for registering for the Integrated Building Systems Professional (IBSP) Program.<br><br>
+          Your registration has been completed successfully.<br><br>
+          Our team will connect with you shortly via email or WhatsApp with the next steps.<br><br>
+          A confirmation email has been sent to your registered email address.
+        `;
+      } else {
+        modalMessage.innerHTML = `
+          Your registration was successful.<br><br>
+          Our team will contact you shortly.<br><br>
+          If you do not receive an email within a few minutes, please contact support.
+        `;
+      }
 
-            if (!verifyRes.ok) {
-              const errData = await verifyRes.json();
-              throw new Error(errData.error || 'Payment verification failed');
-            }
+      // Show success modal overlay
+      modal.classList.add('active');
 
-            const verifyData = await verifyRes.json();
+      // Listen to OK button click
+      modalOkBtn.onclick = function () {
+        modal.classList.remove('active');
 
-            // Select success modal elements
-            const modal = document.getElementById('successModal');
-            const modalMessage = document.getElementById('modalMessage');
-            const modalOkBtn = document.getElementById('modalOkBtn');
+        // Now transition page UI to success state
+        enrollmentForm.style.display = 'none';
+        formSuccess.style.display = 'block';
 
-            if (verifyData.emailSent) {
-              modalMessage.innerHTML = `
-                Thank you for registering for the Integrated Building Systems Professional (IBSP) Program.<br><br>
-                Your payment has been received successfully.<br><br>
-                Our team will connect with you shortly via email or WhatsApp with the next steps.<br><br>
-                A confirmation email has been sent to your registered email address.
-              `;
-            } else {
-              modalMessage.innerHTML = `
-                Your registration and payment were successful.<br><br>
-                Our team will contact you shortly.<br><br>
-                If you do not receive an email within a few minutes, please contact support.
-              `;
-            }
-
-            // Show success modal overlay
-            modal.classList.add('active');
-
-            // Listen to OK button click
-            modalOkBtn.onclick = function () {
-              modal.classList.remove('active');
-
-              // Now transition page UI to success state
-              enrollmentForm.style.display = 'none';
-              formSuccess.style.display = 'block';
-
-              const formContainer = document.querySelector('.pricing-form-container');
-              if (formContainer) {
-                const offsetTop = formContainer.offsetTop - 100;
-                window.scrollTo({
-                  top: offsetTop,
-                  behavior: 'smooth'
-                });
-              }
-            };
-          } catch (verifyErr) {
-            console.error('Verification error:', verifyErr);
-            alert(verifyErr.message || 'Payment verification failed. Please contact support.');
-            submitBtn.innerText = originalText;
-            submitBtn.disabled = false;
-          }
-        },
-        prefill: {
-          name: enrollmentData.full_name,
-          email: enrollmentData.email,
-          contact: enrollmentData.contact_number
-        },
-        theme: {
-          color: '#03B3C3' // Match the bright teal primary color: var(--bright)
-        },
-        modal: {
-          ondismiss: function () {
-            // Re-enable submit button if checkout popup is closed without payment
-            submitBtn.innerText = originalText;
-            submitBtn.disabled = false;
-          }
+        const formContainer = document.querySelector('.pricing-form-container');
+        if (formContainer) {
+          const offsetTop = formContainer.offsetTop - 100;
+          window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+          });
         }
       };
-
-      const rzp = new Razorpay(options);
-      
-      rzp.on('payment.failed', function (response) {
-        alert('Payment failed: ' + response.error.description);
-        submitBtn.innerText = originalText;
-        submitBtn.disabled = false;
-      });
-
-      rzp.open();
-
     } catch (err) {
       console.error('Submission error:', err);
       alert(err.message || 'There was an error submitting your form. Please try again or contact support.');
