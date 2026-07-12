@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IBSP Course Payment | Zenacle</title>
+  <meta name="description" content="Complete your IBSP course fee payment securely." />
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --teal-primary:#005662;--teal-accent:#03B3C3;--teal-dark:#003d46;
+      --bg:#F7F9FA;--white:#fff;--text:#002e35;--text-sec:rgba(0,86,98,.75);
+      --border:rgba(0,86,98,.14);--r:14px;--font:"Century Gothic",CenturyGothic,AppleGothic,sans-serif;
+    }
+    html{font-size:16px;scroll-behavior:smooth}
+    body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 16px 60px}
+    /* ── LOGO ── */
+    .logo-bar{width:100%;max-width:520px;margin-bottom:32px;display:flex;align-items:center;gap:10px}
+    .logo-text{font-size:1.2rem;font-weight:700;color:var(--teal-primary);letter-spacing:-.3px}
+    .logo-text span{color:var(--teal-accent)}
+    /* ── CARD ── */
+    .card{width:100%;max-width:520px;background:var(--white);border-radius:20px;box-shadow:0 8px 40px rgba(0,86,98,.13);overflow:hidden}
+    .card-header{background:linear-gradient(135deg,var(--teal-primary),var(--teal-dark));padding:28px 32px}
+    .card-header h1{font-size:1.35rem;color:#fff;font-weight:700;letter-spacing:-.3px}
+    .card-header p{font-size:.85rem;color:rgba(255,255,255,.75);margin-top:6px}
+    .card-body{padding:32px}
+    /* ── FORM ── */
+    .form-group{margin-bottom:20px}
+    label{display:block;font-size:.82rem;font-weight:600;color:var(--text-sec);margin-bottom:7px;text-transform:uppercase;letter-spacing:.8px}
+    input{width:100%;padding:13px 16px;border:1.5px solid var(--border);border-radius:10px;font-family:var(--font);font-size:.95rem;color:var(--text);background:#fff;outline:none;transition:.2s}
+    input:focus{border-color:var(--teal-accent);box-shadow:0 0 0 3px rgba(3,179,195,.12)}
+    /* ── BUTTONS ── */
+    .btn{width:100%;padding:15px;border:none;border-radius:50px;font-family:var(--font);font-size:1rem;font-weight:700;cursor:pointer;transition:.25s;display:flex;align-items:center;justify-content:center;gap:8px}
+    .btn-primary{background:linear-gradient(90deg,var(--teal-primary),var(--teal-accent));color:#fff;box-shadow:0 4px 18px rgba(0,86,98,.28)}
+    .btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,86,98,.38)}
+    .btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+    .btn-secondary{background:transparent;color:var(--teal-primary);border:2px solid var(--teal-primary);margin-top:12px}
+    .btn-secondary:hover{background:rgba(0,86,98,.06)}
+    /* ── SPINNER ── */
+    .spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    /* ── SUMMARY CARD ── */
+    .summary{background:var(--bg);border-radius:var(--r);padding:22px;margin-bottom:24px;border:1.5px solid var(--border)}
+    .summary-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);gap:12px}
+    .summary-row:last-child{border-bottom:none}
+    .s-label{font-size:.8rem;font-weight:600;color:var(--text-sec);text-transform:uppercase;letter-spacing:.7px;flex-shrink:0}
+    .s-value{font-size:.9rem;font-weight:600;color:var(--text);text-align:right}
+    .amount-row .s-label,.amount-row .s-value{color:var(--teal-primary)}
+    .amount-row .s-value{font-size:1.2rem;font-weight:800}
+    /* ── STATUS STATES ── */
+    .state{display:none;text-align:center;padding:8px 0}
+    .state.active{display:block}
+    .state-icon{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:1.6rem}
+    .icon-success{background:rgba(16,185,129,.12);color:#059669}
+    .icon-error{background:rgba(239,68,68,.1);color:#dc2626}
+    .icon-info{background:rgba(3,179,195,.12);color:var(--teal-accent)}
+    .state h2{font-size:1.25rem;color:var(--text);margin-bottom:8px}
+    .state p{font-size:.9rem;color:var(--text-sec);line-height:1.6}
+    .pid-box{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;margin:16px 0;font-size:.85rem;color:var(--text-sec)}
+    .pid-box strong{color:var(--teal-primary);display:block;word-break:break-all}
+    /* ── ALERT ── */
+    .alert{border-radius:10px;padding:13px 16px;font-size:.88rem;margin-bottom:18px;display:none}
+    .alert.show{display:block}
+    .alert-error{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:#b91c1c}
+    .alert-warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);color:#92400e}
+    /* ── DIVIDER ── */
+    .divider{height:1px;background:var(--border);margin:24px 0}
+    /* ── SECURE BADGE ── */
+    .secure{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.78rem;color:var(--text-sec);margin-top:20px}
+    .secure svg{color:var(--teal-accent)}
+    @media(max-width:480px){.card-body{padding:24px 20px}.card-header{padding:22px 20px}}
+  </style>
+</head>
+<body>
+
+<div class="logo-bar">
+  <div class="logo-text">Zenacle <span>Solutions</span></div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h1>IBSP Course Payment</h1>
+    <p>Integrated Building Systems Professional Program</p>
+  </div>
+  <div class="card-body">
+
+    <!-- ── STEP 1: VERIFY IDENTITY ── -->
+    <div id="stepVerify">
+      <div class="alert alert-error" id="verifyError"></div>
+
+      <div class="form-group">
+        <label for="inputEmail">Registered Email Address</label>
+        <input type="email" id="inputEmail" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label for="inputPhone">Registered WhatsApp Number</label>
+        <input type="tel" id="inputPhone" placeholder="+91 98765 43210" autocomplete="tel" />
+      </div>
+
+      <button class="btn btn-primary" id="btnContinue" onclick="handleContinue()">
+        <span id="continueTxt">Continue</span>
+        <div class="spinner" id="continueSpinner"></div>
+      </button>
+    </div>
+
+    <!-- ── STEP 2: PAYMENT SUMMARY (PENDING) ── -->
+    <div id="stepSummary" style="display:none">
+      <div class="alert alert-warn" id="summaryWarn" style="display:none"></div>
+
+      <div class="summary" id="regSummary"></div>
+
+      <button class="btn btn-primary" id="btnPay" onclick="handlePay()">
+        <span id="payTxt">Pay ₹25,200</span>
+        <div class="spinner" id="paySpinner"></div>
+      </button>
+    </div>
+
+    <!-- ── STATE: ALREADY PAID ── -->
+    <div class="state" id="stateAlreadyPaid">
+      <div class="state-icon icon-success">✓</div>
+      <h2>Payment Already Completed</h2>
+      <p>Your registration has already been confirmed.<br>Our team will contact you shortly.</p>
+    </div>
+
+    <!-- ── STATE: SUCCESS ── -->
+    <div class="state" id="stateSuccess">
+      <div class="state-icon icon-success">✓</div>
+      <h2>Payment Successful</h2>
+      <p>Thank you! Your IBSP registration is now confirmed.</p>
+      <div class="pid-box">
+        Amount Paid: <strong>₹25,200</strong>
+        Payment ID: <strong id="displayPaymentId">—</strong>
+      </div>
+      <p style="margin-top:8px">Our team will contact you shortly via email or WhatsApp with the next steps.</p>
+    </div>
+
+    <!-- ── STATE: FAILED / RETRY ── -->
+    <div class="state" id="stateFailed">
+      <div class="state-icon icon-error">✕</div>
+      <h2>Payment Failed</h2>
+      <p id="failMsg">Your payment could not be processed. Please try again.</p>
+      <div class="divider"></div>
+      <button class="btn btn-primary" id="btnRetry" onclick="handlePay()">
+        <span>Retry Payment</span>
+      </button>
+      <button class="btn btn-secondary" onclick="resetToVerify()">Change Details</button>
+    </div>
+
+    <!-- ── STATE: NOT FOUND ── -->
+    <div class="state" id="stateNotFound">
+      <div class="state-icon icon-error">?</div>
+      <h2>Registration Not Found</h2>
+      <p>We couldn't find a registration matching the information you entered.<br><br>Please check your Email Address and WhatsApp Number or contact the IBSP team.</p>
+      <div class="divider"></div>
+      <button class="btn btn-secondary" onclick="resetToVerify()">Try Again</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="secure">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  Secured by Razorpay · 256-bit SSL
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  // Session state — kept in memory only, never persisted
+  let _sessionToken  = '';  // HMAC-signed token from /api/payment/lookup
+  let _orderId       = '';  // Razorpay order_id from /api/payment/create-order
+  let _registration  = null;
+
+  // ── UTILITIES ──────────────────────────────────────────────────────────────
+  function showState(id) {
+    ['stepVerify','stepSummary','stateAlreadyPaid','stateSuccess','stateFailed','stateNotFound']
+      .forEach(s => {
+        const el = document.getElementById(s);
+        if (el) { el.style.display = 'none'; el.classList.remove('active'); }
+      });
+    const target = document.getElementById(id);
+    if (target) { target.style.display = 'block'; target.classList.add('active'); }
+  }
+
+  function setLoading(btnId, spinnerId, txtId, loading, label) {
+    const btn = document.getElementById(btnId);
+    const sp  = document.getElementById(spinnerId);
+    const tx  = document.getElementById(txtId);
+    btn.disabled = loading;
+    sp.style.display  = loading ? 'block' : 'none';
+    tx.textContent    = loading ? '' : label;
+  }
+
+  function showError(elId, msg) {
+    const el = document.getElementById(elId);
+    el.textContent = msg;
+    el.classList.add('show');
+  }
+  function hideError(elId) {
+    const el = document.getElementById(elId);
+    el.textContent = '';
+    el.classList.remove('show');
+  }
+
+  function resetToVerify() {
+    _sessionToken = ''; _orderId = ''; _registration = null;
+    hideError('verifyError');
+    showState('stepVerify');
+  }
+
+  function formatSlots(slots) {
+    if (!slots) return '—';
+    if (Array.isArray(slots)) return slots.join(', ') || '—';
+    return String(slots);
+  }
+
+  function buildSummary(reg) {
+    return `
+      <div class="summary-row"><span class="s-label">Name</span><span class="s-value">${reg.name || '—'}</span></div>
+      <div class="summary-row"><span class="s-label">Profession</span><span class="s-value">${reg.profession || '—'}</span></div>
+      <div class="summary-row"><span class="s-label">Qualification</span><span class="s-value">${reg.qualification || '—'}</span></div>
+      <div class="summary-row"><span class="s-label">Batch</span><span class="s-value">${reg.batch_type || '—'}</span></div>
+      <div class="summary-row"><span class="s-label">Time Slot</span><span class="s-value">${formatSlots(reg.time_slots)}</span></div>
+      <div class="summary-row amount-row"><span class="s-label">Course Fee</span><span class="s-value">₹25,200</span></div>
+    `;
+  }
+
+  // ── STEP 1: CONTINUE ───────────────────────────────────────────────────────
+  async function handleContinue() {
+    hideError('verifyError');
+    const email = document.getElementById('inputEmail').value.trim();
+    const phone = document.getElementById('inputPhone').value.trim();
+
+    if (!email || !phone) {
+      showError('verifyError', 'Please enter both your Email Address and WhatsApp Number.');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showError('verifyError', 'Please enter a valid email address.');
+      return;
+    }
+
+    setLoading('btnContinue','continueSpinner','continueTxt', true, 'Continue');
+
+    try {
+      const res  = await fetch('/api/payment/lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, whatsapp_number: phone })
+      });
+      const data = await res.json();
+
+      if (res.status === 404 || !data.success) {
+        showState('stateNotFound');
+        return;
+      }
+
+      // Store the signed session token — email/phone are NOT kept in memory
+      _sessionToken  = data.session_token || '';
+      _registration  = data.registration;
+
+      if (data.alreadyPaid) {
+        showState('stateAlreadyPaid');
+        return;
+      }
+
+      document.getElementById('regSummary').innerHTML = buildSummary(data.registration);
+      if (data.paymentFailed) {
+        const w = document.getElementById('summaryWarn');
+        w.textContent = 'Your previous payment attempt was unsuccessful. You may try again.';
+        w.classList.add('show');
+        w.style.display = 'block';
+      } else {
+        document.getElementById('summaryWarn').style.display = 'none';
+      }
+      showState('stepSummary');
+
+    } catch (err) {
+      showError('verifyError', 'A network error occurred. Please check your connection and try again.');
+    } finally {
+      setLoading('btnContinue','continueSpinner','continueTxt', false, 'Continue');
+    }
+  }
+
+  // Allow Enter key on inputs
+  document.getElementById('inputEmail').addEventListener('keydown', e => { if(e.key==='Enter') handleContinue(); });
+  document.getElementById('inputPhone').addEventListener('keydown', e => { if(e.key==='Enter') handleContinue(); });
+
+  // ── STEP 2: PAY ────────────────────────────────────────────────────────────
+  async function handlePay() {
+    if (!_sessionToken) {
+      // Token missing or expired — send user back to verify
+      showError('verifyError', 'Your session has expired. Please verify your registration again.');
+      resetToVerify();
+      return;
+    }
+
+    setLoading('btnPay','paySpinner','payTxt', true, 'Pay ₹25,200');
+
+    try {
+      // Send ONLY the session token — no email or phone number
+      const res  = await fetch('/api/payment/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_token: _sessionToken })
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (res.status === 409) {
+          showState('stateAlreadyPaid');
+        } else if (res.status === 401) {
+          // Token expired during the 15-min window — restart
+          showError('verifyError', 'Your session expired. Please verify your registration again.');
+          resetToVerify();
+        } else {
+          showState('stateFailed');
+          document.getElementById('failMsg').textContent = data.message || 'Failed to initiate payment. Please try again.';
+        }
+        return;
+      }
+
+      _orderId = data.order_id;
+      openRazorpay(data);
+
+    } catch (err) {
+      showState('stateFailed');
+      document.getElementById('failMsg').textContent = 'A network error occurred. Please try again.';
+    } finally {
+      setLoading('btnPay','paySpinner','payTxt', false, 'Pay ₹25,200');
+    }
+  }
+
+  // ── RAZORPAY CHECKOUT ──────────────────────────────────────────────────────
+  function openRazorpay(orderData) {
+    const reg = _registration || {};
+    const options = {
+      key:      orderData.key,
+      amount:   orderData.amount * 100,
+      currency: orderData.currency || 'INR',
+      order_id: orderData.order_id,
+      name:     'Zenacle Solutions LLP',
+      description: 'IBSP Course Fee',
+      prefill: {
+        name:    reg.name    || orderData.prefill?.name || '',
+        email:   orderData.prefill?.email || '',
+        contact: orderData.prefill?.contact || ''
+      },
+      theme: { color: '#005662' },
+
+      handler: async function(response) {
+        await verifyPayment(response);
+      },
+
+      modal: {
+        ondismiss: async function() {
+          // User closed without completing — mark FAILED using the order_id
+          try {
+            await fetch('/api/payment/fail', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: _orderId,
+                failure_reason: 'Payment window closed by user'
+              })
+            });
+          } catch(_) {}
+          showState('stateFailed');
+          document.getElementById('failMsg').textContent = 'Payment was cancelled. You can retry anytime using this page.';
+        }
+      }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.on('payment.failed', async function(resp) {
+      try {
+        await fetch('/api/payment/fail', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            razorpay_order_id: _orderId,
+            failure_reason: resp.error?.description || 'Payment failed'
+          })
+        });
+      } catch(_) {}
+      showState('stateFailed');
+      document.getElementById('failMsg').textContent =
+        resp.error?.description || 'Payment failed. Please try again.';
+    });
+
+    rzp.open();
+  }
+
+  // ── VERIFY ─────────────────────────────────────────────────────────────────
+  async function verifyPayment(response) {
+    try {
+      const res = await fetch('/api/payment/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          razorpay_order_id:   response.razorpay_order_id,
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_signature:  response.razorpay_signature
+        })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('displayPaymentId').textContent = response.razorpay_payment_id;
+        showState('stateSuccess');
+      } else {
+        showState('stateFailed');
+        document.getElementById('failMsg').textContent = data.message || 'Payment verification failed. Please contact support.';
+      }
+    } catch (err) {
+      showState('stateFailed');
+      document.getElementById('failMsg').textContent = 'Verification failed. Please contact support with your Payment ID: ' + (response.razorpay_payment_id || '');
+    }
+  }
+</script>
+</body>
+</html>

@@ -163,6 +163,18 @@ if (enrollmentForm) {
         body: JSON.stringify({ enrollmentData })
       });
 
+      // Handle duplicate registration (409) with a specific user message
+      if (regRes.status === 409) {
+        const dupData = await regRes.json();
+        submitBtn.innerText = originalText;
+        submitBtn.disabled = false;
+        alert(
+          dupData.message ||
+          'You have already registered for this batch. Please complete your payment or contact the IBSP team.'
+        );
+        return;
+      }
+
       if (!regRes.ok) {
         const errData = await regRes.json();
         throw new Error(errData.error || 'Failed to complete registration.');
